@@ -1,0 +1,189 @@
+<!--
+Proposal Website: "Hey Lakshu, ek baat toh suno 😏"
+Single-file HTML/CSS/JS. Theme: white-pastel. Tone: Hindi-English (Hinglish).
+Instructions:
+- Open this file in a browser to preview.
+- To add background music, replace the `src` of the <audio> element with a hosted mp3 URL and set `autoplay` if you want it to auto-play (note: many browsers block autoplay with sound).
+- You can host this on GitHub Pages or any static host.
+--><!doctype html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Hey Lakshu, ek baat toh suno 😏</title>
+<style>
+  :root{
+    --bg: #fffaf6; /* soft cream */
+    --accent: #ffd6e0; /* pastel pink */
+    --accent2: #d6f7ff; /* pastel blue */
+    --text: #2b2b2b;
+    --muted: #6b6b6b;
+    --card: #ffffff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family: 'Segoe UI', Roboto, system-ui, -apple-system; background:var(--bg); color:var(--text);display:flex;align-items:center;justify-content:center;min-height:100vh}
+  .wrap{width:100%;max-width:820px;padding:28px}
+  .card{background:linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,250,255,0.95));border-radius:18px;box-shadow:0 8px 30px rgba(15,15,20,0.06);padding:28px;position:relative;overflow:hidden}
+  header{display:flex;align-items:center;gap:16px}
+  .avatar{width:64px;height:64px;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:20px}
+  h1{font-size:22px;margin:0}
+  p.lead{color:var(--muted);margin-top:6px}.scene{margin-top:18px;padding:18px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.6),rgba(250,245,255,0.6));display:flex;gap:20px;align-items:center} .left{flex:1} .right{width:220px;display:flex;flex-direction:column;gap:10px;align-items:center}
+
+.question{font-size:18px;font-weight:600} .sub{color:var(--muted);margin-top:8px}
+
+.btns{display:flex;gap:12px;margin-top:14px} button.btn{padding:10px 14px;border-radius:12px;border:0;cursor:pointer;font-weight:600;box-shadow:0 6px 18px rgba(26,26,26,0.06)} .yes{background:linear-gradient(90deg,#ccffec,#d6fff4);} .maybe{background:linear-gradient(90deg,#fff5cc,#fff0d6);} .no{background:linear-gradient(90deg,#ffd6e0,#ffd1f0);position:relative}
+
+.note{margin-top:18px;color:var(--muted);font-size:13px}
+
+.confetti{position:absolute;inset:0;pointer-events:none}
+
+/* small playful footer */ footer{margin-top:18px;color:var(--muted);font-size:13px;text-align:center}
+
+/* runaway animation helper */ .runaway{transition: transform 0.25s ease, left 0.15s ease, top 0.15s ease}
+
+/* responsive */ @media (max-width:640px){.right{display:none}.scene{flex-direction:column}.wrap{padding:18px}} </style>
+
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <canvas id="confetti" class="confetti"></canvas>
+    <header>
+      <div class="avatar">L</div>
+      <div>
+        <h1>Hey Lakshu, ek baat toh suno 😏</h1>
+        <p class="lead">I made a tiny thing. Click next and promise you'll be honest (and have fun).</p>
+      </div>
+    </header><div class="scene" id="page1">
+  <div class="left">
+    <div class="question">So, ek choti si curiosity...</div>
+    <div class="sub">Why do you have to be this cute? It’s unfair to everyone else 😅</div>
+    <div class="btns">
+      <button class="btn maybe" onclick="toQ2()">Okay fine, next 😅</button>
+    </div>
+  </div>
+  <div class="right">
+    <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='170' height='170'><rect rx='20' width='100%' height='100%' fill='%23ffd6e0'/><text x='50%' y='54%' dominant-baseline='middle' text-anchor='middle' font-size='36' fill='%23ffffff' font-family='Segoe UI'>L</text></svg>" alt="L" style="width:170px;border-radius:12px;box-shadow:0 8px 20px rgba(0,0,0,0.06)"/>
+  </div>
+</div>
+
+<!-- question 2 -->
+<div class="scene" id="page2" style="display:none">
+  <div class="left">
+    <div class="question">Kuch sach batao...</div>
+    <div class="sub">Do you like me... even a little bit? 👀</div>
+    <div class="btns" id="choiceRow">
+      <button class="btn yes" id="yesBtn">Yes 😳</button>
+      <button class="btn no runaway" id="noBtn">No 😐</button>
+      <button class="btn maybe" id="maybeBtn">Maybe 🤭</button>
+    </div>
+    <p class="note">(If you press No, let's see who is faster — your heart or the button 😈)</p>
+  </div>
+  <div class="right">
+    <div style="font-size:13px;color:var(--muted);">Just be honest. No pressure.</div>
+  </div>
+</div>
+
+<!-- final pages -->
+<div class="scene" id="page3" style="display:none">
+  <div class="left">
+    <div class="question" id="finalHeading">Yesss! 🎉</div>
+    <div class="sub" id="finalSub">I had a feeling... Let's celebrate this tiny universe win.</div>
+    <div style="margin-top:14px"><button class="btn yes" onclick="finishAww()">Awww 🥹</button></div>
+  </div>
+  <div class="right">
+    <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><rect rx='20' width='100%' height='100%' fill='%23d6fff4'/><text x='50%' y='54%' dominant-baseline='middle' text-anchor='middle' font-size='36' fill='%2300352b' font-family='Segoe UI'>❤</text></svg>" alt="heart" style="width:160px;border-radius:12px;box-shadow:0 8px 20px rgba(0,0,0,0.06)"/>
+  </div>
+</div>
+
+<div class="scene" id="pageNo" style="display:none">
+  <div class="left">
+    <div class="question">Oops... Button tried to run away 😅</div>
+    <div class="sub">But I still made this — because you matter. No hard feelings, promise.</div>
+    <div style="margin-top:14px"><button class="btn maybe" onclick="resetFlow()">Try again?</button></div>
+  </div>
+  <div class="right"></div>
+</div>
+
+<div class="note" id="endNote">Made with a little chaos, a lot of heart. 💫</div>
+<footer>Playful proposal by your favourite guy — click things, have fun.</footer>
+
+  </div>
+</div><!-- optional audio: replace src with your hosted mp3 if you want background music --><audio id="bgAudio" loop preload="auto">
+  <!-- example: <source src="https://example.com/teraliye.mp3" type="audio/mpeg"> -->
+</audio><script>
+  // simple page flow
+  function toQ2(){
+    document.getElementById('page1').style.display='none';
+    document.getElementById('page2').style.display='flex';
+  }
+
+  // runaway no button logic
+  const noBtn = document.getElementById('noBtn');
+  const yesBtn = document.getElementById('yesBtn');
+  const maybeBtn = document.getElementById('maybeBtn');
+  const card = document.querySelector('.card');
+
+  function randomPos(el){
+    const rect = card.getBoundingClientRect();
+    const w = rect.width - el.offsetWidth - 40;
+    const h = rect.height - el.offsetHeight - 40;
+    const left = Math.max(10, Math.floor(Math.random()*w));
+    const top = Math.max(10, Math.floor(Math.random()*h));
+    el.style.position='relative';
+    el.style.left = left+'px';
+    el.style.top = top+'px';
+  }
+
+  let runCount = 0;
+  noBtn.addEventListener('mouseenter', ()=>{
+    if(runCount < 6){ randomPos(noBtn); runCount++; }
+  });
+
+  // clicks
+  yesBtn.addEventListener('click', ()=>{
+    explodeConfetti();
+    showPage('page3');
+    // play audio if present
+    const a = document.getElementById('bgAudio'); if(a && a.src) a.play().catch(()=>{});
+  });
+
+  maybeBtn.addEventListener('click', ()=>{
+    // gentle nudge
+    alert('Hmm, "Maybe" toh hum "Yes" ki practice samajh lete hain 😏');
+  });
+
+  noBtn.addEventListener('click', ()=>{
+    // in case someone manages to click it
+    showPage('pageNo');
+  });
+
+  function showPage(id){
+    ['page1','page2','page3','pageNo'].forEach(x=>{ const el=document.getElementById(x); if(el) el.style.display=(x===id)?'flex':'none'; });
+  }
+
+  function resetFlow(){
+    runCount=0; noBtn.style.left='0'; noBtn.style.top='0'; showPage('page2');
+  }
+
+  // tiny confetti implementation
+  const canvas = document.getElementById('confetti');
+  const ctx = canvas.getContext('2d');
+  let W, H, parts = [];
+  function resize(){ W=canvas.width=card.offsetWidth; H=canvas.height=card.offsetHeight; }
+  window.addEventListener('resize', resize); resize();
+
+  function rand(min,max){return Math.random()*(max-min)+min}
+  function makeParticle(){ return {x:rand(0,W), y:rand(-20,0), vx:rand(-2,2), vy:rand(2,6), size:rand(6,12), color:['#ffd6e0','#ffd1f0','#d6fff4','#fff5cc'][Math.floor(Math.random()*4)] } }
+  function explodeConfetti(){ parts=[]; for(let i=0;i<120;i++) parts.push(makeParticle()); }
+  function step(){ ctx.clearRect(0,0,W,H); for(let p of parts){ p.x += p.vx; p.y += p.vy; p.vy += 0.08; ctx.fillStyle=p.color; ctx.fillRect(p.x,p.y,p.size, p.size*0.6); } requestAnimationFrame(step); }
+  step();
+
+  // small UX: if user clicks outside, do nothing
+  document.addEventListener('click',(e)=>{/*prevent accidental*/});
+
+  // small helper to auto-focus mobile
+  setTimeout(()=>{document.body.scrollTop=0;document.documentElement.scrollTop=0},200);
+</script></body>
+</html>
